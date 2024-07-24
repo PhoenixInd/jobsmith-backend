@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class SkillService {
+  constructor(private prisma: PrismaService){}
   create(createSkillDto: CreateSkillDto) {
     return 'This action adds a new skill';
   }
