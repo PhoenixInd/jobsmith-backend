@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String
+  profile     Profile?
+  applications Application[]
+  skills      UserSkill[]
+  jobs        UserJob[] // For User role company that are the position the company has, a company has jobs but not a proffessional
+  offers      Offer[] // For User role proffessional that are the position the proffessional has, a proffesional has offers but not a company
+  ID_Role Int
+  Role    Role @relation(fields: [ID_Role], references: [ID])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Role {
+  ID   Int    @id @default(autoincrement())
+  Name String @unique @default("Proffessional")
+
+  // One to Many relation with User
+  Users User[]
+}
+
+model Profile {
+  id       Int     @id @default(autoincrement())
+  userId   Int     @unique
+  bio      String?
+  location String?
+  website  String?
+  User     User    @relation(fields: [userId], references: [id])
+}
+
+model Job {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  requirements String
+  users       UserJob[]
+  offers      Offer[]
+  skills      JobSkill[]
+  createdAt   DateTime  @default(now())
+}
+
+model Offer {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  jobId       Int
+  User        User    @relation(fields: [userId], references: [id])
+  Job         Job     @relation(fields: [jobId], references: [id])
+  StartDate   DateTime
+  EndDate     DateTime
+  show        Boolean // For proffessionals to show or hide the offer from the public view in their experience
+  applications Application[]
+  createdAt   DateTime  @default(now())
+}
+
+model Application {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  offerId     Int
+  statusId    Int
+  User        User    @relation(fields: [userId], references: [id])
+  offer       Offer   @relation(fields: [offerId], references: [id])
+  status      ApplicationStatus @relation(fields: [statusId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ApplicationStatus {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  applications Application[]
+}
+
+model Skill {
+  id      Int     @id @default(autoincrement())
+  name    String
+  users   UserSkill[]
+  jobs    JobSkill[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model UserJob {
+  userId Int
+  jobId  Int
+  User   User @relation(fields: [userId], references: [id])
+  Job    Job  @relation(fields: [jobId], references: [id])
+  
+  @@id([userId, jobId])
+}
+
+model UserSkill {
+  userId Int
+  skillId Int
+  User   User @relation(fields: [userId], references: [id])
+  Skill  Skill @relation(fields: [skillId], references: [id])
+  
+  @@id([userId, skillId])
+}
+
+model JobSkill {
+  jobId Int
+  skillId Int
+  Job   Job @relation(fields: [jobId], references: [id])
+  Skill  Skill @relation(fields: [skillId], references: [id])
+  
+  @@id([jobId, skillId])
+}

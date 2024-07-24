@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: jobsmith
+      POSTGRES_USER: jobsmith
+      POSTGRES_PASSWORD: jobsmithpass
+    ports:
+      - 5499:5432
