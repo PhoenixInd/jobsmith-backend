@@ -4,8 +4,9 @@ import { CreateUserSkillDto } from './dto/create-user_skill.dto';
 import { UpdateUserSkillDto } from './dto/update-user_skill.dto';
 import { LoggedUserDto } from 'src/auth/dto/logged-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User-skill')
 @Controller('user-skill')
 export class UserSkillController {
   constructor(private readonly userSkillService: UserSkillService) {}

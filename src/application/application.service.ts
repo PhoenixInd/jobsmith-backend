@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { PrismaService } from 'src/prisma.service';
-import { JobService } from 'src/job/job.service';
 import { OfferService } from 'src/offer/offer.service';
 
 @Injectable()

@@ -3,8 +3,9 @@ import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Skill')
 @Controller('skill')
 export class SkillController {
   constructor(private readonly skillService: SkillService) {}

@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { PrismaService } from 'src/prisma.service';
-import { NotFoundError } from 'rxjs';
 import { SkillService } from 'src/skill/skill.service';
 import { UserService } from 'src/user/user.service';
 

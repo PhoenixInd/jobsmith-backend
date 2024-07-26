@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { JobSkillService } from './job_skill.service';
 import { CreateJobSkillDto } from './dto/create-job_skill.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Job-skill')
 @Controller('job-skill')
 export class JobSkillController {
   constructor(private readonly jobSkillService: JobSkillService) {}
