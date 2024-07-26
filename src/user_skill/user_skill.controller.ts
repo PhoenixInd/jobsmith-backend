@@ -5,6 +5,8 @@ import { UpdateUserSkillDto } from './dto/update-user_skill.dto';
 import { LoggedUserDto } from 'src/auth/dto/logged-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/role/role.guard';
+import { Role } from 'src/role/role.decorator';
 
 @ApiTags('User-skill')
 @Controller('user-skill')
@@ -12,12 +14,13 @@ export class UserSkillController {
   constructor(private readonly userSkillService: UserSkillService) {}
 
   @Post()
+  @Role('Proffessional', 'Admin')
   @ApiOperation({ summary: 'Create a user skill' })
   @ApiResponse({ status: 201, description: 'User skill created' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 409, description: 'User skill already exists' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   create(@Body() createUserSkillDto: CreateUserSkillDto, @Req() req: { user: LoggedUserDto }) {
     return this.userSkillService.create(createUserSkillDto, req.user);
   }
@@ -55,11 +58,12 @@ export class UserSkillController {
   }
 
   @Delete()
+  @Role('Proffessional', 'Admin')
   @ApiOperation({ summary: 'Delete a user skill' })
   @ApiResponse({ status: 200, description: 'User skill deleted' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'User skill not found' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   remove(@Body() createUserSkillDto: CreateUserSkillDto) {
     return this.userSkillService.remove(createUserSkillDto);
   }

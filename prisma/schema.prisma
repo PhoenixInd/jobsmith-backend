@@ -122,7 +122,7 @@ model ApplicationStatus {
 
 model Skill {
   id      Int     @id @default(autoincrement())
-  name    String
+  name    String  @unique
   users   UserSkill[]
   jobs    JobSkill[]
   createdAt   DateTime  @default(now())

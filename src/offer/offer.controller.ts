@@ -4,6 +4,8 @@ import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Role } from 'src/role/role.decorator';
+import { RolesGuard } from 'src/role/role.guard';
 
 @ApiTags('Offer')
 @Controller('offer')
@@ -11,12 +13,13 @@ export class OfferController {
   constructor(private readonly offerService: OfferService) {}
 
   @Post()
+  @Role('Company', 'Admin')
   @ApiOperation({ summary: 'Create a new offer' })
   @ApiResponse({ status: 201, description: 'Offer created' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 409, description: 'Offer already exists' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   create(@Body() createOfferDto: CreateOfferDto) {
     return this.offerService.create(createOfferDto);
   }
@@ -38,22 +41,24 @@ export class OfferController {
   }
 
   @Patch('/:id')
+  @Role('Company', 'Admin')
   @ApiOperation({ summary: 'Update an offer' })
   @ApiResponse({ status: 200, description: 'Offer updated' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Offer not found' })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   update(@Param('id') id: string, @Body() updateOfferDto: UpdateOfferDto) {
     return this.offerService.update(+id, updateOfferDto);
   }
 
   @Delete('/:id')
+  @Role('Company', 'Admin')
   @ApiOperation({ summary: 'Delete an offer' })
   @ApiResponse({ status: 200, description: 'Offer deleted' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Offer not found' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.offerService.remove(+id);
   }

@@ -47,11 +47,11 @@ export class JobService {
   }
 
   async findAll() {
-    return this.prisma.job.findMany();
+    return this.prisma.job.findMany({include: {skills: {include: {Skill: true}}}});
   }
 
   async findOne(id: number) {
-    const job = await this.prisma.job.findUnique({ where: { id } });
+    const job = await this.prisma.job.findUnique({ where: { id }, include: {skills: {include: {Skill: true}}} });
     if (!job) {
       throw new NotFoundException('Job not found');
     }
@@ -86,6 +86,7 @@ export class JobService {
           create: skills ? skills.map((skillId) => ({ skillId })) : [],
         },
       },
+      include: {skills: {include: {Skill: true}}}
     });
 
     return updatedJob;

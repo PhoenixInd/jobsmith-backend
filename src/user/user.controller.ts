@@ -4,6 +4,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Role } from 'src/role/role.decorator';
+import { RolesGuard } from 'src/role/role.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -11,11 +13,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @Role('Admin')
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 409, description: 'User already exists' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 201, description: 'Returns the created user' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }

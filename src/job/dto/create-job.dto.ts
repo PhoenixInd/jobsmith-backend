@@ -18,11 +18,10 @@ export class CreateJobDto {
     @MinLength(10, { message: 'Requirements must be at least 10 characters long' })
     @MaxLength(300, { message: 'Requirements must be at most 300 characters long' })
     requirements: string;
-
-    @IsOptional()
+    
     @IsArray()
     @IsNumber({}, { each: true, message: 'Each skill ID must be a number' })
-    skills?: number[];
+    skills: number[];
 
     @IsNumber()
     @IsNotEmpty()

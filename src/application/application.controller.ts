@@ -4,6 +4,8 @@ import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { LoggedUserDto } from 'src/auth/dto/logged-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/role/role.guard';
+import { Role } from 'src/role/role.decorator';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Application')
@@ -12,11 +14,12 @@ export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
+  @Role('Proffessional', 'Admin')
   @ApiOperation({ summary: 'Create a new application' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 201, description: 'Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   create(@Body() createApplicationDto: CreateApplicationDto) {
     return this.applicationService.create(createApplicationDto);
   }
@@ -58,20 +61,22 @@ export class ApplicationController {
   }
 
   @Patch('/:id')
+  @Role('Proffessional', 'Admin')
   @ApiOperation({ summary: 'Update an application' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 200, description: 'Updated' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   update(@Param('id') id: string, @Body() updateApplicationDto: UpdateApplicationDto) {
     return this.applicationService.update(+id, updateApplicationDto);
   }
 
   @Delete('/:id')
+  @Role('Proffessional', 'Admin')
   @ApiOperation({ summary: 'Delete an application' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 200, description: 'Deleted' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.applicationService.remove(+id);
   }
