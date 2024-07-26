@@ -23,4 +23,8 @@ export class CreateJobDto {
     @IsArray()
     @IsNumber({}, { each: true, message: 'Each skill ID must be a number' })
     skills?: number[];
+
+    @IsNumber()
+    @IsNotEmpty()
+    userId: number;
 }

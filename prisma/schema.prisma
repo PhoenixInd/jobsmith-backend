@@ -21,10 +21,10 @@ model User {
   profile     Profile?
   applications Application[]
   skills      UserSkill[]
-  jobs        UserJob[] // For User role company that are the position the company has, a company has jobs but not a proffessional
+  jobs        Job[] // For User role company that are the position the company has, a company has jobs but not a proffessional
   offers      Offer[] // For User role proffessional that are the position the proffessional has, a proffesional has offers but not a company
   ID_Role Int
-  Role    Role @relation(fields: [ID_Role], references: [ID])
+  Role    Role @relation(fields: [ID_Role], references: [ID], onDelete: Cascade, onUpdate: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -43,7 +43,7 @@ model Profile {
   bio      String?
   location String?
   website  String?
-  User     User    @relation(fields: [userId], references: [id])
+  User     User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Job {
@@ -51,7 +51,8 @@ model Job {
   title       String
   description String
   requirements String
-  users       UserJob[]
+  userId      Int // For User role company that are the position the company has
+  User        User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   offers      Offer[]
   skills      JobSkill[]
   createdAt   DateTime  @default(now())
@@ -59,13 +60,13 @@ model Job {
 
 model Offer {
   id          Int     @id @default(autoincrement())
-  userId      Int
+  userId      Int?    // User that has been selected
   jobId       Int
-  User        User    @relation(fields: [userId], references: [id])
-  Job         Job     @relation(fields: [jobId], references: [id])
-  StartDate   DateTime
-  EndDate     DateTime
-  show        Boolean // For proffessionals to show or hide the offer from the public view in their experience
+  User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Job         Job     @relation(fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  StartDate   DateTime?
+  EndDate     DateTime?
+  show        Boolean @default(true) // For proffessionals to show or hide the offer from the public view in their experience
   applications Application[]
   createdAt   DateTime  @default(now())
 }
@@ -75,11 +76,41 @@ model Application {
   userId      Int
   offerId     Int
   statusId    Int
-  User        User    @relation(fields: [userId], references: [id])
-  offer       Offer   @relation(fields: [offerId], references: [id])
-  status      ApplicationStatus @relation(fields: [statusId], references: [id])
+  User        User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  offer       Offer   @relation(fields: [offerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  status      ApplicationStatus @relation(fields: [statusId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  url         String
+  suggestion  String?
+  ranking              ApplicationRanking?  @relation(fields: [rankingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  rankingId            Int?
+  selectionTag         SelectionProbabilityTag? @relation(fields: [selectionTagId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  selectionTagId       Int?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+model ApplicationRanking {
+  id            Int            @id @default(autoincrement())
+  applicationId Int
+  criteriaId    Int
+  score         Float          // Score of the criteria
+  Application   Application[]
+  Criteria      RankingCriteria @relation(fields: [criteriaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model RankingCriteria {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  weight      Float   // Weight of the criteria
+  rankings    ApplicationRanking[]
+}
+
+model SelectionProbabilityTag {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  applications Application[]
 }
 
 model ApplicationStatus {
@@ -98,20 +129,11 @@ model Skill {
   updatedAt   DateTime  @updatedAt
 }
 
-model UserJob {
-  userId Int
-  jobId  Int
-  User   User @relation(fields: [userId], references: [id])
-  Job    Job  @relation(fields: [jobId], references: [id])
-  
-  @@id([userId, jobId])
-}
-
 model UserSkill {
   userId Int
   skillId Int
-  User   User @relation(fields: [userId], references: [id])
-  Skill  Skill @relation(fields: [skillId], references: [id])
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Skill  Skill @relation(fields: [skillId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   
   @@id([userId, skillId])
 }
@@ -119,8 +141,8 @@ model UserSkill {
 model JobSkill {
   jobId Int
   skillId Int
-  Job   Job @relation(fields: [jobId], references: [id])
-  Skill  Skill @relation(fields: [skillId], references: [id])
+  Job   Job @relation(fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Skill  Skill @relation(fields: [skillId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   
   @@id([jobId, skillId])
 }

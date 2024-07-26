@@ -3,7 +3,7 @@ import { IsOptional, IsString, IsNumber, IsUrl, MinLength, MaxLength, IsNotEmpty
 export class CreateProfileDto {
     @IsNotEmpty()
     @IsNumber({}, { message: 'userId must be a number' })
-    userId?: number;
+    userId: number;
 
     @IsOptional()
     @IsString({ message: 'Bio must be a string' })

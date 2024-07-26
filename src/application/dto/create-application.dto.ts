@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 export class CreateApplicationDto {
     @IsNotEmpty()
     @IsNumber()
@@ -11,4 +11,8 @@ export class CreateApplicationDto {
     @IsNotEmpty()
     @IsNumber()
     statusId: number;
+
+    @IsNotEmpty()
+    @IsString()
+    url: string
 }
