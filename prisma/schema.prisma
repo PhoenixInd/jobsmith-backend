@@ -23,15 +23,15 @@ model User {
   skills      UserSkill[]
   jobs        Job[] // For User role company that are the position the company has, a company has jobs but not a proffessional
   offers      Offer[] // For User role proffessional that are the position the proffessional has, a proffesional has offers but not a company
-  ID_Role Int
-  Role    Role @relation(fields: [ID_Role], references: [ID], onDelete: Cascade, onUpdate: Cascade)
+  roleId Int
+  Role    Role @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
 model Role {
-  ID   Int    @id @default(autoincrement())
-  Name String @unique @default("Proffessional")
+  id   Int    @id @default(autoincrement())
+  name String @unique @default("Proffessional")
 
   // One to Many relation with User
   Users User[]

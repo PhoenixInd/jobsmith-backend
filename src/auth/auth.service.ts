@@ -5,10 +5,11 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { checkIfEncoded, useDecoding } from 'src/helpers/Base64';
 import { LoginUserDto } from './dto/login-user.dto';
+import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService, private jwtService: JwtService) {}
+  constructor(private userService: UserService, private jwtService: JwtService, private roleService: RoleService) {}
 
     async register(user: CreateUserDto) {
         let exists = await this.userService.findOneByEmail(user);
@@ -18,6 +19,8 @@ export class AuthService {
         if(checkIfEncoded(user.password)){
             throw new BadRequestException('Password must not be sent raw');
         }
+        const role = await this.roleService.findOne(user.roleId);
+        if(!role) throw new NotFoundException('Role not found');
         const decodedPassword = useDecoding(user.password);
         user.password = await bcrypt.hash(decodedPassword, 10);
         return this.userService.create(user);

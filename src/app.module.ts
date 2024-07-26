@@ -12,6 +12,7 @@ import { JobSkillModule } from './job_skill/job_skill.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { HomeController } from './home/home.controller';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -22,7 +23,7 @@ import { HomeController } from './home/home.controller';
     secret: process.env.JWT_SECRET,
     signOptions: { expiresIn: '1d' },
   }), 
-    UserModule, JobModule, ProfileModule, ApplicationModule, SkillModule, OfferModule, AuthModule, UserSkillModule, JobSkillModule],
+    UserModule, JobModule, ProfileModule, ApplicationModule, SkillModule, OfferModule, AuthModule, UserSkillModule, JobSkillModule, RoleModule],
   controllers: [HomeController],
   providers: [],
 })

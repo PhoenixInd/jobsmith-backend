@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateJobSkillDto } from './dto/create-job_skill.dto';
-import { UpdateJobSkillDto } from './dto/update-job_skill.dto';
 import { PrismaService } from 'src/prisma.service';
 import { JobService } from 'src/job/job.service';
 import { SkillService } from 'src/skill/skill.service';

@@ -18,6 +18,6 @@ export class CreateUserDto {
     password: string;
 
     @IsNotEmpty()
-    @IsInt({ message: 'ID_Role must be an integer' })
-    ID_Role: number;
+    @IsInt({ message: 'roleId must be an integer' })
+    roleId: number;
 }
