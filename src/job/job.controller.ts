@@ -27,17 +27,27 @@ export class JobController {
   }
 
   @Get('/:id')
+  @ApiOperation({ summary: 'Get a job by id' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 200, description: 'Ok' })
   findOne(@Param('id') id: string) {
     return this.jobService.findOne(+id);
   }
 
   @Patch('/:id')
+  @ApiOperation({ summary: 'Update a job' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 200, description: 'Updated' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   @UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
     return this.jobService.update(+id, updateJobDto);
   }
 
   @Delete('/:id')
+  @ApiOperation({ summary: 'Delete a note' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 200, description: 'Deleted' })
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
     return this.jobService.remove(+id);
