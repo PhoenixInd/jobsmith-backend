@@ -3,14 +3,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import { LoginUserDto } from 'src/auth/dto/login-user.dto';
+import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
 export class UserService {
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private profileService: ProfileService) {}
   async create(createUserDto: CreateUserDto) {
     const user = await this.prisma.user.create({ data: createUserDto });
     user.password = "";
+    await this.profileService.create({ userId: user.id });
     return user;
   }
 
@@ -23,7 +25,7 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({ where: { id }, include: { profile: true, Role: true, skills: true, applications: true } });
     if (!user) {
         throw new NotFoundException('User not found');
     }
@@ -36,9 +38,8 @@ export class UserService {
     if(createuser.email) {
         user = await this.prisma.user.findUnique({ where: { email: createuser.email } });
         if(!user) {
-          throw new NotFoundException('User not found');
+          return null;
         }
-        user.password = "";
         return user;
     }
   }

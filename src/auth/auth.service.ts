@@ -23,7 +23,8 @@ export class AuthService {
         if(!role) throw new NotFoundException('Role not found');
         const decodedPassword = useDecoding(user.password);
         user.password = await bcrypt.hash(decodedPassword, 10);
-        return this.userService.create(user);
+        const userRegistered = await this.userService.create(user);
+        return userRegistered;
     }
 
     async login(loginUser: LoginUserDto) {

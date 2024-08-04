@@ -17,7 +17,7 @@ export class ProfileService {
   async findOne(id: number) {
     const profile = await this.prisma.profile.findUnique({where: {id}});
     if (!profile) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User not found, this is Profile');
     }
     return profile;
   }

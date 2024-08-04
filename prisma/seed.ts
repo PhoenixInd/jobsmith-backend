@@ -68,10 +68,38 @@ const SKILLS = [
     { Name: "Kanban" },
     { Name: "Jira" },
   ];
+const APPLICATION_STATUSES = [
+  {
+    ID: 1,
+    Name: "Saved",
+    Description: "Application saved",
+  },
+  {
+    ID: 2,
+    Name: "Applied",
+    Description: "Application applied",
+  },
+  {
+    ID: 3,
+    Name: "Interview",
+    Description: "Application on interview",
+  },
+  {
+    ID: 4,
+    Name: "Offer",
+    Description: "Application on offer",
+  },
+  {
+    ID: 5,
+    Name: "Rejected",
+    Description: "Application rejected",
+  }
+];
 
   async function main() {
     await insertRoles();
     await insertSkills();
+    await insertApplicationStatuses();
     console.log('Seeding completed successfully');
   }
   
@@ -100,6 +128,23 @@ const SKILLS = [
         update: {},
         create: {
           name: skill.Name,
+        },
+      });
+      console.log(result);
+    }
+  }
+
+  async function insertApplicationStatuses() {
+    console.log("INSERTING APPLICATION STATUSES .....");
+  
+    for (const applicationStatus of APPLICATION_STATUSES) {
+      const result = await prisma.applicationStatus.upsert({
+        where: { id: applicationStatus.ID },
+        update: {},
+        create: {
+          id: applicationStatus.ID,
+          name: applicationStatus.Name,
+          description: applicationStatus.Description,
         },
       });
       console.log(result);

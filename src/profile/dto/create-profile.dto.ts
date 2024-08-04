@@ -6,6 +6,12 @@ export class CreateProfileDto {
     userId: number;
 
     @IsOptional()
+    @IsString({ message: 'Profession must be a string' })
+    @MinLength(3, { message: 'Profession must be at least 3 characters long' })
+    @MaxLength(100, { message: 'Profession must be at most 100 characters long' })
+    profession?: string;
+
+    @IsOptional()
     @IsString({ message: 'Bio must be a string' })
     @MinLength(10, { message: 'Bio must be at least 10 characters long' })
     @MaxLength(500, { message: 'Bio must be at most 500 characters long' })
