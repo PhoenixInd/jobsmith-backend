@@ -46,4 +46,13 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
     }
 
+    async validate(userId: number){
+        let user = await this.userService.findOne(userId);
+        if(!user){
+            throw new NotFoundException('User not found');
+        }
+        user.password = "";
+        return user;
+    }
+
 }

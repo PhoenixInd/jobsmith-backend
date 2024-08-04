@@ -9,11 +9,17 @@ export class UserService {
 
   constructor(private prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
-    return this.prisma.user.create({ data: createUserDto });
+    const user = await this.prisma.user.create({ data: createUserDto });
+    user.password = "";
+    return user;
   }
 
   async findAll() {
-    return this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany();
+    users.forEach(user => {
+      user.password = "";
+    })
+    return users;
   }
 
   async findOne(id: number) {
@@ -21,26 +27,33 @@ export class UserService {
     if (!user) {
         throw new NotFoundException('User not found');
     }
-    return this.prisma.user.findUnique({ where: { id } });
+    user.password = ""; // remove password from response
+    return user;
   }
 
   async findOneByEmail(createuser: CreateUserDto | LoginUserDto) {
     let user : UpdateUserDto | undefined; 
     if(createuser.email) {
         user = await this.prisma.user.findUnique({ where: { email: createuser.email } });
-        if (user) {
-            return user;
+        if(!user) {
+          throw new NotFoundException('User not found');
         }
+        user.password = "";
+        return user;
     }
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     await this.findOne(id);
-    return this.prisma.user.update({ where: { id }, data: updateUserDto });
+    const user = await this.prisma.user.update({ where: { id }, data: updateUserDto });
+    user.password = "";
+    return user;
   }
 
   async remove(id: number) {
     await this.findOne(id);
-    return this.prisma.user.delete({ where: { id } });
+    const user = await this.prisma.user.delete({ where: { id } });
+    user.password = "";
+    return user;
   }
 }
