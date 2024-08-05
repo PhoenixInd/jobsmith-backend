@@ -96,10 +96,50 @@ const APPLICATION_STATUSES = [
   }
 ];
 
+const selectionProbabilities = [
+  {
+    ID: 1,
+    Name: "Low",
+    Description: "Low selection probability",
+  },
+  {
+    ID: 2,
+    Name: "Medium",
+    Description: "Medium selection probability",
+  },
+  {
+    ID: 3,
+    Name: "High",
+    Description: "High selection probability",
+  },
+]
+
+const rankingCriteria = [
+  {
+    ID: 1,
+    Name: "High Priority",
+    Description: "High priority of choice",
+    Weight: 1.0,
+  },
+  {
+    ID: 2,
+    Name: "Medium Priority",
+    Description: "Medium priority of choice",
+    Weight: 0.6,
+  },
+  {
+    ID: 3,
+    Name: "Low Priority",
+    Description: "Low priority of choice",
+    Weight: 0.3,
+  },
+]
   async function main() {
     await insertRoles();
     await insertSkills();
     await insertApplicationStatuses();
+    await insertSelectionProbabilities();
+    await insertRankingCriteria();
     console.log('Seeding completed successfully');
   }
   
@@ -150,6 +190,42 @@ const APPLICATION_STATUSES = [
       console.log(result);
     }
   }
+
+  async function insertSelectionProbabilities() {
+    console.log("INSERTING SELECTION PROBABILITIES .....");
+  
+    for (const selectionProbability of selectionProbabilities) {
+      const result = await prisma.selectionProbabilityTag.upsert({
+        where: { id: selectionProbability.ID },
+        update: {},
+        create: {
+          id: selectionProbability.ID,
+          name: selectionProbability.Name,
+          description: selectionProbability.Description,
+        },
+      });
+      console.log(result);
+    }
+  }
+
+  async function insertRankingCriteria() {
+    console.log("INSERTING RANKING CRITERIA .....");
+  
+    for (const ranking of rankingCriteria) {
+      const result = await prisma.rankingCriteria.upsert({
+        where: { id: ranking.ID },
+        update: {},
+        create: {
+          id: ranking.ID,
+          name: ranking.Name,
+          description: ranking.Description,
+          weight: ranking.Weight,
+        },
+      })
+      console.log(result);
+    }
+  }
+    
 
 main()
   .then(async () => {
