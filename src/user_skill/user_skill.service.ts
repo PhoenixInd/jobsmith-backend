@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserSkillDto } from './dto/create-user_skill.dto';
 import { UpdateUserSkillDto } from './dto/update-user_skill.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -12,15 +12,31 @@ export class UserSkillService {
   async create(createUserSkillDto: CreateUserSkillDto, userDTO: LoggedUserDto) {
     const user = await this.userService.findOne(createUserSkillDto.userId);
     const skill = await this.skillService.findOne(createUserSkillDto.skillId);
-    if(user.id !== userDTO.id) {
-      throw new UnauthorizedException('You are not authorized to create this skill');
+
+    if (user.id !== userDTO.id) {
+        throw new UnauthorizedException('You are not authorized to create this skill');
     }
-    if(!user || !skill) {
-      throw new NotFoundException('User or Skill not found');
+    if (!user || !skill) {
+        throw new NotFoundException('User or Skill not found');
     }
-    const userSkill = await this.prisma.userSkill.create({data: {userId: user.id, skillId: skill.id}});
+
+    const existingUserSkill = await this.prisma.userSkill.findFirst({
+        where: {
+            userId: user.id,
+            skillId: skill.id
+        }
+    });
+
+    if (existingUserSkill) {
+        throw new ConflictException('UserSkill already exists');
+    }
+
+    const userSkill = await this.prisma.userSkill.create({
+        data: { userId: user.id, skillId: skill.id }
+    });
+
     return userSkill;
-  }
+  } 
 
   async findAll() {
     return this.prisma.userSkill.findMany();
