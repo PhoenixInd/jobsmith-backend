@@ -1,73 +1,78 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# JobSmith Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este es el backend del proyecto JobSmith, desarrollado con NestJS, Prisma y Docker para la gestión de la base de datos.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Requisitos
 
-## Description
+- Node.js (v14 o superior)
+- Docker
+- Docker Compose
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Configuración del Proyecto
 
-## Installation
+Sigue los siguientes pasos para configurar y ejecutar el proyecto en tu máquina local.
+
+### 1. Clonar el Repositorio
+
+Primero, clona el repositorio a tu máquina local:
 
 ```bash
-$ npm install
+git clone https://github.com/tu-usuario/jobsmith-backend.git
+cd jobsmith-backend
 ```
 
-## Running the app
+### 2. Instalar Dependencias
+
+Instala las dependencias del proyecto usando npm:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Test
+### 3. Configuración de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto y añade las variables de entorno necesarias. Puedes basarte en el archivo `.env.example`. Asegurate que los datos del DATABASE_URL coinciden con los parámetros del docker-compose.yml
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
 
-## Support
+### 4. Configurar y Ejecutar Docker
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Inicia los contenedores de Docker y configura la base de datos con los siguientes comandos:
 
-## Stay in touch
+```bash
+npm run setup
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Este comando ejecutará los siguientes pasos:
+- `docker-compose up -d`: Levanta los contenedores de Docker en segundo plano.
+- `prisma generate`: Genera el cliente de Prisma.
+- `prisma migrate deploy`: Despliega las migraciones de la base de datos.
+- `ts-node ./prisma/seed.ts`: Ejecuta el script de seed para poblar la base de datos.
 
-## License
+### 5. Iniciar el Servidor
 
-Nest is [MIT licensed](LICENSE).
+Finalmente, inicia el servidor con el siguiente comando:
+
+```bash
+npm run start
+```
+
+El servidor debería estar corriendo en `http://localhost:3000`.
+
+## Scripts Disponibles
+
+- `npm run build`: Compila el proyecto.
+- `npm run format`: Formatea el código usando Prettier.
+- `npm run start`: Inicia el servidor.
+- `npm run start:dev`: Inicia el servidor en modo de desarrollo con watch.
+- `npm run start:debug`: Inicia el servidor en modo de depuración con watch.
+- `npm run start:prod`: Inicia el servidor en modo de producción.
+- `npm run lint`: Lint del código usando ESLint.
+- `npm run test`: Ejecuta las pruebas.
+- `npm run test:watch`: Ejecuta las pruebas en modo watch.
+- `npm run test:cov`: Ejecuta las pruebas y genera un reporte de cobertura.
+- `npm run test:debug`: Ejecuta las pruebas en modo de depuración.
+- `npm run test:e2e`: Ejecuta las pruebas end-to-end.
+- `npm run setup`: Configura y ejecuta Docker, genera Prisma Client, despliega migraciones y ejecuta el seed.
