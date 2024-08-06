@@ -31,7 +31,7 @@ npm install
 
 ### 3. Environment Configuration
 
-Create a .env file in the project root and add the necessary environment variables. You can base it on the .env.example file. Ensure that the DATABASE_URL data matches the parameters in the docker-compose.yml.
+Create a `.env` file in the project root and add the necessary environment variables. You can base it on the `.env.example` file. Ensure that the DATABASE_URL data matches the parameters in the docker-compose.yml.
 
 ```bash
 cp .env.example .env
