@@ -1,78 +1,78 @@
 # JobSmith Backend
 
-Este es el backend del proyecto JobSmith, desarrollado con NestJS, Prisma y Docker para la gestión de la base de datos.
+This is the backend for the JobSmith project, developed with NestJS, Prisma, and Docker for database management.
 
-## Requisitos
+## Requirements
 
-- Node.js (v14 o superior)
+- Node.js (v17 or higher)
 - Docker
 - Docker Compose
 
-## Configuración del Proyecto
+## Project Setup
 
-Sigue los siguientes pasos para configurar y ejecutar el proyecto en tu máquina local.
+Follow these steps to set up and run the project on your local machine.
 
-### 1. Clonar el Repositorio
+### 1. Clone the Repository
 
-Primero, clona el repositorio a tu máquina local:
+First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/tu-usuario/jobsmith-backend.git
+git clone https://github.com/PhoenixInd/jobsmith-backend.git
 cd jobsmith-backend
 ```
 
-### 2. Instalar Dependencias
+### 2. Install Dependencies
 
-Instala las dependencias del proyecto usando npm:
+Install the project dependencies using npm:
 
 ```bash
 npm install
 ```
 
-### 3. Configuración de Entorno
+### 3. Environment Configuration
 
-Crea un archivo `.env` en la raíz del proyecto y añade las variables de entorno necesarias. Puedes basarte en el archivo `.env.example`. Asegurate que los datos del DATABASE_URL coinciden con los parámetros del docker-compose.yml
+Create a .env file in the project root and add the necessary environment variables. You can base it on the .env.example file. Ensure that the DATABASE_URL data matches the parameters in the docker-compose.yml.
 
 ```bash
 cp .env.example .env
 ```
 
-### 4. Configurar y Ejecutar Docker
+### 4. Set Up and Run Docker
 
-Inicia los contenedores de Docker y configura la base de datos con los siguientes comandos:
+Start the Docker containers and set up the database with the following commands:
 
 ```bash
 npm run setup
 ```
 
-Este comando ejecutará los siguientes pasos:
-- `docker-compose up -d`: Levanta los contenedores de Docker en segundo plano.
-- `prisma generate`: Genera el cliente de Prisma.
-- `prisma migrate deploy`: Despliega las migraciones de la base de datos.
-- `ts-node ./prisma/seed.ts`: Ejecuta el script de seed para poblar la base de datos.
+This command will execute the following steps:
+- `docker-compose up -d`: Starts the Docker containers in the background.
+- `prisma generate`: Generates the Prisma client.
+- `prisma migrate deploy`: Deploys the database migrations.
+- `ts-node ./prisma/seed.ts`: Runs the seed script to populate the database.
 
-### 5. Iniciar el Servidor
+### 5. Start the Server
 
-Finalmente, inicia el servidor con el siguiente comando:
+Finally, start the server with the following command:
 
 ```bash
 npm run start
 ```
 
-El servidor debería estar corriendo en `http://localhost:3000`.
+The server should be running at http://localhost:3000.
 
-## Scripts Disponibles
+## Available Scripts
 
-- `npm run build`: Compila el proyecto.
-- `npm run format`: Formatea el código usando Prettier.
-- `npm run start`: Inicia el servidor.
-- `npm run start:dev`: Inicia el servidor en modo de desarrollo con watch.
-- `npm run start:debug`: Inicia el servidor en modo de depuración con watch.
-- `npm run start:prod`: Inicia el servidor en modo de producción.
-- `npm run lint`: Lint del código usando ESLint.
-- `npm run test`: Ejecuta las pruebas.
-- `npm run test:watch`: Ejecuta las pruebas en modo watch.
-- `npm run test:cov`: Ejecuta las pruebas y genera un reporte de cobertura.
-- `npm run test:debug`: Ejecuta las pruebas en modo de depuración.
-- `npm run test:e2e`: Ejecuta las pruebas end-to-end.
-- `npm run setup`: Configura y ejecuta Docker, genera Prisma Client, despliega migraciones y ejecuta el seed.
+- `npm run build`: Compiles the project.
+- `npm run format`: Formats the code using Prettier.
+- `npm run start`: Starts the server.
+- `npm run start:dev`: Starts the server in development mode with watch.
+- `npm run start:debug`: Starts the server in debug mode with watch.
+- `npm run start:prod`: Starts the server in production mode.
+- `npm run lint`: Lints the code using ESLint.
+- `npm run test`: Runs the tests.
+- `npm run test:watch`: Runs the tests in watch mode.
+- `npm run test:cov`: Runs the tests and generates a coverage report.
+- `npm run test:debug`: Runs the tests in debug mode.
+- `npm run test:e2e`: Runs end-to-end tests.
+- `npm run setup`: Sets up and runs Docker, generates Prisma Client, deploys migrations, and runs the seed script.
